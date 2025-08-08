@@ -15,20 +15,13 @@ const app = express();
 //Middleware
 app.use(express.json())
 app.use(cookieParser())
-const allowedOrigins = [
-  'http://localhost:5173',
-  'https://inventory-frontend-ruddy-ten.vercel.app'
-];
+const cors = require("cors");
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS blocked for origin: ${origin}`));
-    }
-  },
-  credentials: true
+  origin: "https://inventory-frontend-ruddy-ten.vercel.app", // ✅ allow your frontend
+  credentials: true, // ✅ allow cookies and auth headers
 }));
+
 //routes
 app.use('/api/auth',authRoutes);
 app.use('/api/userinfo',userRoutes)
