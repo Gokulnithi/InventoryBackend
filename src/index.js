@@ -17,8 +17,8 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use(cors({
-  origin: "https://inventory-frontend-ruddy-ten.vercel.app", // ✅ allow your frontend
-  credentials: true, // ✅ allow cookies and auth headers
+  origin: "https://inventory-frontend-ruddy-ten.vercel.app", 
+  credentials: true, 
 }));
 
 //routes
