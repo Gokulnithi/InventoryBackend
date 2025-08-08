@@ -15,7 +15,6 @@ const app = express();
 //Middleware
 app.use(express.json())
 app.use(cookieParser())
-const cors = require("cors");
 
 app.use(cors({
   origin: "https://inventory-frontend-ruddy-ten.vercel.app", // ✅ allow your frontend
