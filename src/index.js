@@ -8,16 +8,27 @@ const trasactionRoute = require('./routes/trasactionRoute')
 const formRoutes = require('./routes/formRoutes');
 const byBaseDetails = require('./routes/dasboardBase')
 const notificationDue = require('./routes/notificationRoute')
+const VerificationDetails = require('./routes/verifcationDetails');
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
 const app = express();
 //Middleware
 app.use(express.json())
 app.use(cookieParser())
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://inventory-frontend-ruddy-ten.vercel.app'
+];
 app.use(cors({
-    origin: 'https://inventory-frontend-ruddy-ten.vercel.app',
-    credentials: true
-  }))
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    }
+  },
+  credentials: true
+}));
 //routes
 app.use('/api/auth',authRoutes);
 app.use('/api/userinfo',userRoutes)
@@ -26,6 +37,7 @@ app.use('/api/inventory',formRoutes)
 app.use('/api',trasactionRoute)
 app.use('/api',byBaseDetails)
 app.use('/api',notificationDue)
+app.use('/api',VerificationDetails);
 //app.use('/api/users',userRoutes);
 
 //server-start

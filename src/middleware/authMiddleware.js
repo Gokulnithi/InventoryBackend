@@ -1,26 +1,28 @@
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 
+const verifyToken = (req, res, next) => {
+  let token;
 
-const verifyToken = (req,res,next)=>{
-    let token = req.cookies.token;
-    //let authHeader = req.headers.Authorization || req.headers.authorization
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith("Bearer ")) {
+    token = authHeader.split(" ")[1];
+  }
 
-    if(token){
-        //token = authHeader.split(" ")[1];
-        if(!token){
-            return res.status(401).json({message:"no tokken, authorization denied"})
-        }
+  if (!token && req.cookies?.token) {
+    token = req.cookies.token;
+  }
 
-        try{
-            const decode = jwt.verify(token,process.env.JWT_SECRET);
-            req.user = decode;
-            next();
-        }catch(err){
-            res.status(400).json({message:"token is invalid"});
-        }
-    }else{
-        res.status(401).json({message:"no tokken, authorization denied"})
-    }
-}
+  if (!token) {
+    return res.status(401).json({ message: "No token, authorization denied" });
+  }
 
-module.exports = verifyToken
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(400).json({ message: "Token is invalid" });
+  }
+};
+
+module.exports = verifyToken;
